@@ -1,7 +1,7 @@
 # Install
 ```
 cd ~/catkin_ws/src
-git clone https://github.com/pooyanjamshidi/brass_gazebo_battery.git
+git clone https://github.com/tmxkn1/brass_gazebo_battery.git
 ```
 
 # Dependancy
