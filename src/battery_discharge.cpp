@@ -83,6 +83,7 @@ void BatteryPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     // Publish a topic for motor power and charge level
     this->motor_power = this->rosNode->advertise<kobuki_msgs::MotorPower>("/mobile_base/commands/motor_power", 1);
     this->charge_state = this->rosNode->advertise<std_msgs::Float64>("/mobile_base/commands/charge_level", 1);
+    this->battery_percentage = this->rosNode->advertise<std_msgs::Float64>("/mobile_base/commands/battery_percentage", 1);
     this->charge_state_mwh = this->rosNode->advertise<std_msgs::Float64>("/mobile_base/commands/charge_level_mwh", 1);
 
     this->set_charging = this->rosNode->advertiseService(this->model->GetName() + "/set_charging", &BatteryPlugin::SetCharging, this);
@@ -92,6 +93,11 @@ void BatteryPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 
     std::string linkName = _sdf->Get<std::string>("link_name");
     this->link = this->model->GetLink(linkName);
+    if (this->link == NULL) {
+        ROS_INFO("Link %s does not exist.", linkName.c_str());
+        ROS_RED_STREAM("Specified link is invalid.");
+        return;
+    }
 
     this->e0 = _sdf->Get<double>("constant_coef");
     this->e1 = _sdf->Get<double>("linear_coef");
@@ -102,10 +108,14 @@ void BatteryPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     this->tau = _sdf->Get<double>("smooth_current_tau");
 
     std::string batteryName = _sdf->Get<std::string>("battery_name");
-
     if (this->link->BatteryCount() > 0) {
         // Creates the battery
         this->battery = this->link->Battery(batteryName);
+        if (this->battery == NULL) {
+            ROS_INFO("Battery with name %s is not found.", batteryName.c_str());
+            ROS_RED_STREAM("Battery not found.");
+            return;
+        }
         ROS_GREEN_STREAM("Created a battery");
     }
     else
@@ -202,13 +212,15 @@ double BatteryPlugin::OnUpdateVoltage(const common::BatteryPtr &_battery)
         this->q = this->c;
     }
 
-    std_msgs::Float64 charge_msg, charge_msg_mwh;
+    std_msgs::Float64 charge_msg, charge_msg_mwh, battery_percentage_msg;
     charge_msg.data = this->q;
     charge_msg_mwh.data = this->q * 1000 * this-> et;
+    battery_percentage_msg.data = this->q/this->c*100;
 
     lock.lock();
     this->charge_state.publish(charge_msg);
     this->charge_state_mwh.publish(charge_msg_mwh);
+    this->battery_percentage.publish(battery_percentage_msg);
     lock.unlock();
 
     return et;

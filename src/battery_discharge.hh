@@ -102,6 +102,7 @@ namespace gazebo
     protected: ros::Publisher charge_state;
     protected: ros::Publisher charge_state_mwh;
     protected: ros::Publisher motor_power;
+    protected: ros::Publisher battery_percentage;
 
     protected: ros::ServiceServer set_charging;
     protected: ros::ServiceServer set_charge;
