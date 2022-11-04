@@ -105,7 +105,6 @@ add_service_files(
 generate_messages(
 DEPENDENCIES
 std_msgs
-geometry_msgs
 sensor_msgs  # Or other packages containing msgs
 )
 
@@ -168,10 +167,6 @@ target_link_libraries(battery_discharge ${roscpp_LIBRARIES} ${GAZEBO_LIBRARIES} 
 add_library(battery_consumer SHARED src/battery_consumer.cpp src/ROS_debugging.h)
 add_dependencies(battery_consumer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(battery_consumer ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES} ${IGNITION-MATH_LIBRARIES})
-
-add_library(cmd_vel_consumer SHARED src/cmd_vel_consumer.cpp src/ROS_debugging.h)
-add_dependencies(cmd_vel_consumer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(cmd_vel_consumer ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES} ${IGNITION-MATH_LIBRARIES})
 
 add_library(motor_consumer SHARED src/motor_consumer.cpp src/ROS_debugging.h)
 add_dependencies(motor_consumer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
