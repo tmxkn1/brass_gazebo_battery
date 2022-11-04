@@ -225,7 +225,7 @@ target_link_libraries(motor_consumer ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES} ${IG
 install(TARGETS
         battery_discharge
         battery_consumer
-        cmd_vel_consumer
+        motor_consumer
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         )
