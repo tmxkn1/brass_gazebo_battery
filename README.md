@@ -68,8 +68,10 @@ To add the plugin to your Jackal urdf, you need to add the following lines insid
 /mobile_base/commands/battery_percentage
 /mobile_base/commands/consumer/motor_power
 ```
-
-Note that the unit for the *charge* is Ah.
+- The remaining battery charge in Amp-hour (Ah).
+- The remaining battery charge in milli-watt-hour (mWh).
+- The remaining battery charge in percentage.
+- The current power consumed by motors in Watt.
 
 # Exposed services
 ```
