@@ -6,16 +6,6 @@ git clone https://github.com/tmxkn1/brass_gazebo_battery.git
 
 # Dependancy
 
-kobuki_msgs
-```
-cd ~/catkin_ws/src
-git clone -b %YOUR_ROS_DISTRO% https://github.com/yujinrobot/kobuki_msgs.git
-```
-or 
-```
-sudo apt install ros-%YOUR_ROS_DISTRO%-kobuki_msgs
-```
-
 libignition-math2-dev
 ```
 sudo apt install libignition-math2-dev
@@ -55,11 +45,19 @@ To add the plugin to your Jackal urdf, you need to add the following lines insid
     </plugin>
   </gazebo>
   <gazebo>
-  <plugin name="consumer" filename="libbattery_consumer.so">
-      <link_name>base_link</link_name>
-      <battery_name>main_battery</battery_name>
-      <power_load>67.5</power_load>
-  </plugin>
+    <plugin name="consumer" filename="libbattery_consumer.so">
+        <link_name>base_link</link_name>
+        <battery_name>main_battery</battery_name>
+        <power_load>27.5</power_load>
+    </plugin>
+  </gazebo>
+  <gazebo>
+    <plugin name="motor_consumer" filename="libmotor_consumer.so">
+        <link_name>base_link</link_name>
+        <battery_name>main_battery</battery_name>
+        <power_load_rate>1</power_load_rate>
+        <consumer_idle_power>0.1</consumer_idle_power>
+    </plugin>
   </gazebo>
   ```
 
@@ -67,8 +65,8 @@ To add the plugin to your Jackal urdf, you need to add the following lines insid
 ```
 /mobile_base/commands/charge_level
 /mobile_base/commands/charge_level_mwh
-/mobile_base/commands/motor_power
 /mobile_base/commands/battery_percentage
+/mobile_base/commands/consumer/motor_power
 ```
 
 Note that the unit for the *charge* is Ah.
